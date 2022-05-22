@@ -17,7 +17,7 @@
     },
     mounted() {
       //派发一个action||获取商品分类的三级列表的数据
-      this.$store.dispatch("categoryList"); 
+      this.$store.dispatch("getCategoryList"); 
     },
   }
 

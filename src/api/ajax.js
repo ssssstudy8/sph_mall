@@ -1,8 +1,6 @@
 import axios from "axios"
 import nprogress from "nprogress"
 import "nprogress/nprogress.css"
-import store from '@/store'
-
 
 //利用axios对象的方法create 去创建一个axios实例
 //requests就是axios 只不过稍微配置一下

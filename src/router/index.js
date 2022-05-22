@@ -1,8 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import VueRouter from 'vue-router'
 
 Vue.use(Router)
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 import Home from '@/views/home'
 import Login from '@/views/login'
@@ -32,7 +37,7 @@ export default new Router({
       }
     },
     {
-      path: "/search/:useName?",
+      path: "/search/:keyword?",
       component: Search,
       name: 'search',
       meta: {
@@ -43,14 +48,14 @@ export default new Router({
       //希尔值写法：params
       //props:true
       //对象写法：额外的给路由组件传递一些props
-      props:{a:1111111,b:2222222}
+      //props:{a:1111111,b:2222222}
       //函数写法：可以给params参数，query参数，通过props传递给路由组件
-     /*  props:($route)=>{
-        return {
-          keyword:$route.params.keyword,
-          k:$route.query.k
-        }
-      } */
+      /*  props:($route)=>{
+         return {
+           keyword:$route.params.keyword,
+           k:$route.query.k
+         }
+       } */
     },
     {
       path: '*',

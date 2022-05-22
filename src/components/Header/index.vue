@@ -33,7 +33,7 @@
         </h1>
         <div class="searchArea">
           <form action="###" class="searchForm">
-            <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="useName" />
+            <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword" />
             <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">
               搜索
             </button>
@@ -49,28 +49,40 @@
     name: "",
     data() {
       return {
-        useName: ''
+        keyword: ''
       }
     },
     methods: {
       goSearch() {
+        if (this.$route.query) {
+          let location = {
+            name: "search",
+            params: {
+              keyword: this.keyword || undefined
+            }
+          }
+          location.query = this.$route.query
+          this.$router.push(location)
+        }
+    
+        
         //this.$router.push('./search')
 
         //路由传参
         //第一种：字符串形式
-        //this.$router.push("/search/" + this.useName + "?K=" + this.useName.toUpperCase());
+        //this.$router.push("/search/" + this.keyword + "?K=" + this.keyword.toUpperCase());
         //第二种：模板字符串
-        //this.$router.push(`/search/${this.useName}?k=${this.useName.toUpperCase()}`)
+        //this.$router.push(`/search/${this.keyword}?k=${this.keyword.toUpperCase()}`)
         //第三种：对象
-        this.$router.push({
+        /* this.$router.push({
           name: "search",
           params: {
-            keyword: this.useName
+            keyword: this.keyword
           },
           query: {
-            k: this.useName.toUpperCase()
+            k: this.keyword.toUpperCase()
           }
-        })
+        }) */
 
 
         //面试题1：路由传递参数（对象写法）path是否可以结合params参数一起使用
@@ -79,16 +91,16 @@
         params 只能配合 name 使用，如果提供了 path，params 会失效。
         query 传参类似于网络请求中的 get 请求，query 传过去的参数会拼接在地址栏中（?name=xx）。
         query 较为灵活既可以配合 path 使用，也能配合 name 使用 */
-        //this.$router.push({path:'/search',params:{useName:this.useName},query:{k:this.useName.toUpperCase()}})
+        //this.$router.push({path:'/search',params:{keyword:this.keyword},query:{k:this.keyword.toUpperCase()}})
 
         //面试题2：如何指定params参数可传可不传？
         //如果路由要求传递params参数，但是你就不传递params参数，url会发生问题
         //解决：在配置路由时，在占位符后面加一个问号
-        //this.$router.push({path:'/search',query:{k:this.useName.toUpperCase()}})
+        //this.$router.push({path:'/search',query:{k:this.keyword.toUpperCase()}})
 
         //面试题3：params参数可以传递也可以不传递，但是如果传递是空串，如何解决？
         //使用undefined解决：params参数可以传递也可以不传递（空的字符串）
-        //this.$router.push({path:'/search',params:{useName:'' || undefined},query:{k:this.useName.toUpperCase()}})
+        //this.$router.push({path:'/search',params:{keyword:'' || undefined},query:{k:this.keyword.toUpperCase()}})
 
         //面试4：路由组件能不能传递props数据
         //可以
