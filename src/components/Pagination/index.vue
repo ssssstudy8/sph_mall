@@ -30,7 +30,7 @@
     >
       {{ totalPage }}
     </button>
-    <button :disabled="pageNo == totalPage">下一页</button>
+    <button :disabled="pageNo == totalPage" @click="$emit('getPageNo', pageNo + 1)">下一页</button>
 
     <button style="margin-left: 30px">共{{ total }}条</button>
   </div>

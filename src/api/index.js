@@ -51,3 +51,24 @@ export const reqUserLogin = (data)=>requests({url:'/user/passport/login',data,me
 //获取用户信息（需要带着用户的token向服务器要用户信息）
 //URL:/api/user/passport/auth/getUserInfo  method:get
 export const reqUserInfo = ()=>requests({url:'/user/passport/auth/getUserInfo',method:'get'})
+
+//退出登录 Url:/api/user/passport/logout  get
+export const reqLogout =() =>requests({url:'/user/passport/logout',method:'get'})
+
+//获取用户地址：/api/user/userAddress/auth/findUserAddressList method:get
+export const reqAddressInfo = ()=>requests({url:'/user/userAddress/auth/findUserAddressList',method:'get'})
+
+//获取商品清单 /api/order/auth/trade
+export const reqOrderInfo = ()=>requests({url:'/order/auth/trade',method:'get'})
+
+//提交订单 url：/api/order/auth/submitOrder?tradeNo={tradeNo}
+export const reqSubmitOrder = (tradeNo,data)=>requests({url:`/order/auth/submitOrder?tradeNo=${tradeNo}`,data,method:'post'})
+
+//获取支付信息 /api/payment/weixin/createNative/{orderId}
+export const reqPayInfo = (orderId) => requests({url:`/payment/weixin/createNative/${orderId}`,method:'get'})
+
+//获取订单的支付状态  url:/api/payment/weixin/queryPayStatus/{orderId}
+export const reqPayState = (orderId) => requests({url:`/payment/weixin/queryPayStatus/${orderId}`,method:'get'})
+
+//获取订单列表 url:/api/order/auth/{page}/{limit}
+export const reqMyOrderList = (page, limit) => requests({url:`/order/auth/${page}/${limit}`,method:'get'})

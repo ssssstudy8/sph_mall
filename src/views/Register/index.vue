@@ -10,8 +10,12 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号" v-model="phone" />
-        <span class="error-msg">错误提示信息</span>
+        <input
+          type="text"
+          placeholder="请输入你的手机号"
+          v-model="phone"
+        />
+        <span class="error-msg">{{ errorMessage }}</span>
       </div>
       <div class="content">
         <label>验证码:</label>
@@ -20,7 +24,7 @@
         <button style="width: 80px; height: 37px" @click="getCode">
           获取验证码
         </button>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ codeMessage }}</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
@@ -29,7 +33,7 @@
           placeholder="请输入你的登录密码"
           v-model="password"
         />
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ passwordMessage }}</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
@@ -38,12 +42,12 @@
           placeholder="请输入确认密码"
           v-model="password1"
         />
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ passwordMessage1 }}</span>
       </div>
       <div class="controls">
         <input name="m1" type="checkbox" :checked="agree" />
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ agreeMessage }}</span>
       </div>
       <div class="btn">
         <button @click="userRegister">完成注册</button>
@@ -83,6 +87,12 @@ export default {
       password1: "",
       //是否同意
       agree: true,
+      errorMessage: "",
+      phoneMessage: "", //错误提示
+      codeMessage: "", //错误提示
+      passwordMessage: "", //错误提示
+      passwordMessage1: "", //错误提示
+      agreeMessage: "",
     };
   },
   methods: {
@@ -95,18 +105,42 @@ export default {
         //将组件的code属性值变为仓库中的验证码
         //console.log(store)
         this.code = this.$store.state.user.code;
-      } catch (error) {}
+      } catch (error) {
+        alert(error.message);
+      }
     },
     //用户注册
     async userRegister() {
       try {
         //如果成功 路由跳转
         const { phone, code, password, password1 } = this;
+        let reg_tel = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+        let reg_password = /^[0-9A-Za-z]{6,18}$/;
         //手机号 验证码非空 且密码跟确认密码相等
-        (phone && code && password == password1) && (await this.$store.dispatch("userRegister", {phone, code, password}));
-        this.$router.push("/login");
+        if (reg_tel.test(phone)) {
+          if (code) {
+            if (reg_password.test(password)) {
+              if (password == password1) {
+                await this.$store.dispatch("userRegister", {
+                  phone,
+                  code,
+                  password,
+                });
+                this.$router.push("/login");
+              } else {
+                this.passwordMessage1 = "密码不统一";
+              }
+            } else {
+              this.passwordMessage = "密码格式不正确（6-18位任意数字字母）";
+            }
+          } else {
+            this.codeMessage = "验证码不能为空";
+          }
+        } else {
+          this.errorMessage = "请输入正确手机号哦";
+        }
       } catch (error) {
-        
+        alert(error.message);
       }
     },
   },

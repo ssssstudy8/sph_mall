@@ -12,7 +12,7 @@
                 :class="{ cur: currentIndex == index }">
                 <h3 @mouseenter="changeIndex(index)">
                   <a :data-categoryName="c1.categoryName"
-                    :data-category1Id="c1.categoryId">{{ c1.categoryName }}-{{ index }}</a>
+                    :data-category1Id="c1.categoryId">{{ c1.categoryName }}</a>
                 </h3>
                 <!-- 二级、三级分类 -->
                 <div class="item-list clearfix" :style="{ display: currentIndex == index ? 'block' : 'none' }">
@@ -20,12 +20,12 @@
                     <dl class="fore">
                       <dt>
                         <a :data-categoryName="c2.categoryName"
-                          :data-category1Id="c2.categoryId">{{ c2.categoryName }}</a>
+                          :data-category2Id="c2.categoryId">{{ c2.categoryName }}</a>
                       </dt>
                       <dd>
                         <em v-for="(c3, index) in c2.categoryChild" :key="c3.categoryId">
                           <a :data-categoryName="c3.categoryName"
-                            :data-category1Id="c3.categoryId">{{ c3.categoryName }}</a>
+                            :data-category3Id="c3.categoryId">{{ c3.categoryName }}</a>
                         </em>
                       </dd>
                     </dl>

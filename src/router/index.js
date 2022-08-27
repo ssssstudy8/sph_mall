@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import VueRouter from 'vue-router'
 import routes from './routers'
+import store from '@/store'
 
 Vue.use(Router)
 
@@ -41,7 +42,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
     );
   }
 };
-export default new VueRouter({
+let router = new VueRouter({
   routes,
   //滚动行为
   scrollBehavior(to, from, savedPosition) {
@@ -51,3 +52,46 @@ export default new VueRouter({
     }
   }
 })
+
+//全局守卫
+router.beforeEach(async (to, from, next) => {
+  //to:可以获取到你要跳转到那个路由信息
+  //from:可以获取到你从哪个路由而来的信息
+  //next: 放行函数  next()放行  next(path)放行到指定路径    next(false)
+  // next()
+  let token = store.state.user.token
+  let name = store.state.user.userInfo.name
+  if (token) {
+    if (to.path == '/login') {
+      next('/')
+    } else {
+      //登录了 去的不是登录
+      //如果用户名已经拥有
+      if (name) {
+        next()
+      } else {
+        //没有用户信息，派发action让仓库存储用户信息
+        try {
+          await store.dispatch('getUserInfo')
+          next()
+        } catch (error) {
+          //token失效
+          await store.dispatch('Logout')
+          next('/login')
+        }
+      }
+    }
+  } else {
+    //未登录:不能去交易相关，不能去支付相关，不能去个人中心
+     let toPath = to.path
+     if (toPath.indexOf('/trade') != -1 || toPath.indexOf('/pay') != -1 || toPath.indexOf('/center') != -1) {
+       next('/login?redirect=' + toPath)
+     } else {
+       //去的不是这些路由--放行
+       next()
+     }
+  }
+})
+
+
+export default router

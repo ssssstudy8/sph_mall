@@ -22,7 +22,7 @@
   } from "vuex"
 
   export default {
-    name: '',
+    name: 'Home',
     components: {
       ListContainer,
       Recommend,

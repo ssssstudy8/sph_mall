@@ -435,7 +435,7 @@ export default {
         sessionStorage.setItem("SKUINFO",JSON.stringify(this.skuInfo))
         this.$router.push({
           name: "addcartsuccess",
-          query: { skuInfo: this.skuInfo, skuNum: this.skuNum },
+          query: { skuInfo: this.skuInfo },
         });
       } catch (error) {
         alert(error.message);

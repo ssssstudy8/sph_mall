@@ -2,17 +2,19 @@ import {
   reqGetCode,
   reqUserRegister,
   reqUserLogin,
-  reqUserInfo
+  reqUserInfo,
+  reqLogout
 } from '../../api/index'
 import {
   setToken,
-  getToken
+  getToken,
+  removeToken
 } from '../../utils/token'
 //登录与注册
 const state = {
   code: "",
   token: getToken(),
-  userInfo: ''
+  userInfo: {}
 }
 const mutations = {
   GETCODE(state, code) {
@@ -23,6 +25,12 @@ const mutations = {
   },
   GETUSERINFO(state, userInfo) {
     state.userInfo = userInfo
+  },
+  //清除数据
+  CLEAR() {
+    state.code = ''
+    state.userInfo = {}
+    removeToken()
   }
 }
 const actions = {
@@ -75,12 +83,25 @@ const actions = {
     //console.log(result);
     if (result.code == 200) {
       //提交用户信息
+      // localStorage.setItem("TOKEN",result.data.token)
       commit("GETUSERINFO", result.data)
       // return 'ok'
     }
     /* else{
           return  Promise.reject(new Error('file'))
         } */
+  },
+  //退出登录
+  async Logout({
+    commit
+  }) {
+    let result = await reqLogout()
+    if (result.code == 200) {
+      commit("CLEAR")
+      return 'ok'
+    } else {
+      return Promise.reject(new Error('file'))
+    }
   }
 }
 const getters = {}

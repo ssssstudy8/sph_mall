@@ -16,7 +16,7 @@ const mutations = {
   }
 }
 const actions = {
-  //获取产品信息的action
+  //获取产品信息的action  
   async getGoodInfo({
     commit
   }, skuId) {
@@ -42,7 +42,7 @@ const actions = {
       return "ok"
     } else {
       //加入购物车失败
-      return Promise.reject(new Error("faile"))
+      return Promise.reject(new Error("fail"))
     }
   }
 }

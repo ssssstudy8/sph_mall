@@ -14,7 +14,7 @@
           </ul>
 
           <div class="content">
-            <form action="##">
+            <form>
               <div class="input-text clearFix">
                 <span></span>
                 <input
@@ -38,7 +38,9 @@
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn" @click="userLogin">登&nbsp;&nbsp;录</button>
+              <button class="btn" @click.prevent="userLogin">
+                登&nbsp;&nbsp;录
+              </button>
             </form>
 
             <div class="call clearFix">
@@ -89,11 +91,18 @@ export default {
       try {
         //登录成功
         const { phone, password } = this;
-        phone &&
-          password &&
-          (await this.$store.dispatch("userLogin", { phone, password }));
-        //跳转到home首页
-        this.$router.push("/home");
+        if (phone) {
+          if (password) {
+            await this.$store.dispatch("userLogin", { phone, password });
+            //跳转到home首页
+            let toPath = this.$route.query.redirect || "/home"
+            this.$router.push(toPath);
+          }else{
+            alert("请输入密码")
+          }
+        }else{
+          alert("请输入账号")
+        }
       } catch (error) {
         alert(error.message);
       }
